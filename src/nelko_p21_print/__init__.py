@@ -14,6 +14,7 @@ from enum import IntEnum
 import serial
 from packaging.version import Version
 from PIL import Image, ImageEnhance, ImageOps
+from tqdm import tqdm
 
 try:
     from .template import render_svg_template
@@ -475,6 +476,17 @@ def find_paired_p21():
         pass
     return None
 
+def p21_print(image, density, copies):
+    bitdata = load_image(image)
+    print_command = build_print_command(bitdata, density, copies)
+    answer = send_command(print_command, encode=False)
+    if answer:
+        validate_checksum(answer)
+        status = unpack_printer_status(answer)
+        if status and (DEBUG or status.printer_status != PrinterReadinessStatus.READY):
+            print(status)
+    else:
+        print("Failed to send print command. Make sure the printer is turned on and connected.")
 
 def main():
     parser = argparse.ArgumentParser(
@@ -546,16 +558,7 @@ def main():
         DEBUG = True
         print(f"Using serial device: {SERIAL_DEVICE}")
     if args.image:
-        bitdata = load_image(args.image)
-        print_command = build_print_command(bitdata, args.density, args.copies)
-        answer = send_command(print_command, encode=False)
-        if answer:
-            validate_checksum(answer)
-            status = unpack_printer_status(answer)
-            if status and (args.debug or status.printer_status != PrinterReadinessStatus.READY):
-                print(status)
-        else:
-            print("Failed to send print command. Make sure the printer is turned on and connected.")
+        p21_print(args.image, args.density, args.copies)
     if args.config:
         config = get_config()
         if config:
@@ -612,31 +615,31 @@ def main():
             print("Warning: CSV file is empty or has no rows.")
             return
             
-        print(f"Loaded {len(rows)} rows from CSV. Processing labels...")
+        print(f"Loaded {len(rows)} rows from CSV.")
         
         out_dir = args.out_dir
         if out_dir:
             os.makedirs(out_dir, exist_ok=True)
-            
-        for i, row in enumerate(rows):
-            print(f"Rendering label {i+1}/{len(rows)}...")
+
+        if args.print and out_dir:
+            desc = "Printing + saving"
+        elif args.print:
+            desc = "Printing"
+        elif out_dir:
+            desc = "Saving"
+        else:
+            desc = "Rendering"
+
+        for i, row in enumerate(tqdm(rows, desc=desc, unit="label")):
             try:
                 rendered_img = render_svg_template(template_content, row)
-                
+
                 if out_dir:
                     out_path = os.path.join(out_dir, f"label_{i+1}.png")
                     rendered_img.save(out_path)
-                    print(f"Saved rendered label to: {out_path}")
-                
+
                 if args.print:
-                    print(f"Printing label {i+1} to {SERIAL_DEVICE}...")
-                    bitdata = load_image(rendered_img)
-                    print_command = build_print_command(bitdata, args.density, args.copies)
-                    answer = send_command(print_command, encode=False)
-                    validate_checksum(answer)
-                    status = unpack_printer_status(answer)
-                    if args.debug or status.printer_status != PrinterReadinessStatus.READY:
-                        print(status)
+                    p21_print(rendered_img, args.density, args.copies)
             except Exception as e:
                 print(f"Failed to process label {i+1}: {e}", file=sys.stderr)
 

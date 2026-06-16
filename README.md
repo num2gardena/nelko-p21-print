@@ -11,6 +11,14 @@ $ rfcomm connect /dev/rfcomm0 XX:XX:XX:XX:XX:XX
 
 Make sure to replace the `XX:XX...` part with the Bluetooth MAC of your printer. When the connection was successful, you can start the script. I recommend creating a virtual environment and installing the requirements via `pip`. The script will print a help screen on start.
 
+Alternatively, the script can be installed system-wide as a tool using [uv](https://docs.astral.sh/uv/). This also requires the necessary Bluetooth permissions on the system Python:
+
+```bash
+$ uv tool install --python /usr/bin/python3 .
+```
+
+After installation the `nelko-p21-print` command is available globally.
+
 ## The captured traffic and the printers protocol
 
 It contains a connection and a print of the default template on a 14x40mm label. The entire communication of the printer runs via SPP/RFCOMM aka a serial connection over Bluetooth. The printer also has an internal NFC reader to identify the the label rolls put inside. It automatically determines the format of the labels this way. It also seems to be a type of soft DRM, where the app complains, if you use third-party label rolls.

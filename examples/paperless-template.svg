@@ -5,7 +5,7 @@
    viewBox="0 0 284 96"
    version="1.1"
    id="svg2"
-   sodipodi:docname="label_template.svg"
+   sodipodi:docname="paperless-template.svg"
    inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -40,20 +40,20 @@
      id="rect1" />
   <!-- Text elements replacing placeholders from the CSV row -->
   <text
-     x="103.56592"
-     y="30.02309"
+     x="116.17409"
+     y="52.916878"
      font-family="sans-serif"
      font-size="16px"
      font-weight="bold"
      fill="#000000"
-     id="text1">{Product}</text>
+     id="text1">{ASN}</text>
   <text
      x="99.916176"
      y="64.004616"
      font-family="sans-serif"
      font-size="14px"
      fill="#000000"
-     id="text2">Price: {Price}</text>
+     id="text2" />
   <!-- Image placeholder for the QR code. The id matches "qr_" + column name (URL) -->
   <image
      id="qr_URL"
@@ -63,7 +63,7 @@
      height="93.916878"
      href="" />
   <image
-     id="qr_URL-6"
+     id="qr_ASN"
      x="1.2692431"
      y="1.0554162"
      width="93.916878"

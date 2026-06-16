@@ -15,6 +15,7 @@ dependencies = [
     "crc>=7.1.0",
     "cairosvg>=2.7.1",
     "qrcode>=7.4.2",
+    "tqdm>=4.66.0",
 ]
 
 [project.scripts]
