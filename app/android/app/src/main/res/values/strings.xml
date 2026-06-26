@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Nelko P21</string>
+    <string name="title_activity_main">Nelko P21</string>
+    <string name="package_name">de.fewenk.nelkop21</string>
+    <string name="custom_url_scheme">de.fewenk.nelkop21</string>
+</resources>

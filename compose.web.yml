@@ -1,0 +1,27 @@
+# Homelab / public deployment (NO Bluetooth).
+#
+# Just serves the web app over HTTP for your reverse proxy (Traefik/Cloudflare)
+# to publish. Devices that open it use their own radio: the Windows laptop via
+# Web Serial, the phone via the native app. The app auto-detects (BT off here)
+# and offers Web Serial.
+#
+#   docker compose -f compose.web.yml up -d --build
+services:
+  nelko-web:
+    build: .
+    image: nelko-p21
+    container_name: nelko-p21-web
+    init: true
+    environment:
+      BT: "off"
+      PORT: "8080"
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    # Example Traefik labels (uncomment + adjust to your setup):
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.nelko.rule=Host(`label.example.com`)"
+    #   - "traefik.http.routers.nelko.entrypoints=websecure"
+    #   - "traefik.http.routers.nelko.tls.certresolver=cloudflare"
+    #   - "traefik.http.services.nelko.loadbalancer.server.port=8080"

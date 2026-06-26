@@ -1,0 +1,26 @@
+{
+  "name": "nelko-p21-desktop",
+  "version": "0.0.0",
+  "description": "Nelko P21 desktop (Electron) shell",
+  "private": true,
+  "main": "build/main.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "copy:renderer": "node scripts/copy-renderer.mjs",
+    "start": "npm run build && electron .",
+    "pack": "npm run build && npm run copy:renderer && electron-builder --dir",
+    "dist": "npm run build && npm run copy:renderer && electron-builder",
+    "rebuild": "electron-rebuild -f -w serialport"
+  },
+  "dependencies": {
+    "serialport": "^13.0.0"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^4.0.4",
+    "@types/node": "^24.0.0",
+    "electron": "^42.0.0",
+    "electron-builder": "^26.0.0",
+    "typescript": "^6.0.0"
+  }
+}

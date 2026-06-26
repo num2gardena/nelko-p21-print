@@ -1,0 +1,148 @@
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.designbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.designbar button,
+.designbar__import {
+  font-size: 13px;
+  line-height: normal;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: #1a1a1a;
+  cursor: pointer;
+}
+
+.designbar button:hover,
+.designbar__import:hover {
+  border-color: #999;
+}
+
+.designbar__import {
+  display: inline-flex;
+  align-items: center;
+}
+
+.designbar__open {
+  font-size: 13px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.designbar__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.designbar__name input {
+  font-size: 13px;
+  width: 120px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.designbar__dirty {
+  color: #d97706;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.designbar__delete {
+  color: #c0392b;
+}
+
+.editor__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.editor__toolbar button,
+.editor__file {
+  font-size: 13px;
+  line-height: normal;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: #1a1a1a;
+  cursor: pointer;
+}
+
+.editor__toolbar button:hover,
+.editor__file:hover {
+  border-color: #999;
+}
+
+.editor__file {
+  display: inline-flex;
+  align-items: center;
+}
+
+.editor__spacer {
+  flex: 1;
+}
+
+.editor__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.editor__stage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.editor__canvas-wrap {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  /* checkerboard so the white label is visible on white UI */
+  background-image:
+    linear-gradient(45deg, #eee 25%, transparent 25%),
+    linear-gradient(-45deg, #eee 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #eee 75%),
+    linear-gradient(-45deg, transparent 75%, #eee 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  line-height: 0;
+}
+
+.editor__preview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.editor__preview-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.preview-canvas {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  image-rendering: pixelated;
+}

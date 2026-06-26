@@ -1,0 +1,187 @@
+.device {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Stacked panels in the side column get a divider. */
+.device + .device {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.panel--side .device__head h2 {
+  margin-top: 0;
+}
+
+.device__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.device__head h2 {
+  margin: 0;
+}
+
+.device__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #c0392b;
+}
+
+.device__dot.is-on {
+  background: #27ae60;
+}
+
+.device__transport {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.device__method {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.device__method select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+.device button {
+  font-size: 13px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: #1a1a1a;
+  cursor: pointer;
+}
+
+.device button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.device__row {
+  display: flex;
+  gap: 6px;
+}
+
+.device__note {
+  margin: 0;
+  font-size: 13px;
+  color: #1a7f37;
+}
+
+.device__error {
+  margin: 0;
+  font-size: 13px;
+  color: #c0392b;
+  word-break: break-word;
+}
+
+.device__info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 10px;
+  margin: 0;
+  font-size: 13px;
+}
+
+.device__info dt {
+  color: var(--muted);
+}
+
+.device__info dd {
+  margin: 0;
+}
+
+.device__section {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.device__print {
+  display: flex;
+  gap: 10px;
+}
+
+.device__print label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.device__print input {
+  width: 64px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+.device__print-btn {
+  font-weight: 600;
+}
+
+.device__settings {
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+  font-size: 13px;
+}
+
+.device__settings summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.device__setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.device__setting select {
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+.batch__import {
+  align-self: flex-start;
+}
+
+.batch__columns {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  word-break: break-word;
+}
+
+.batch__hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.batch__hint code {
+  font-size: 12px;
+  padding: 1px 4px;
+}

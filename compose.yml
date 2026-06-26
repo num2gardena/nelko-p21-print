@@ -1,0 +1,34 @@
+# Desktop / "printer is here" deployment.
+#
+# Serves the web app AND talks to the P21 over Bluetooth, all in one container.
+# Open http://localhost:8080 and print — no separate bridge to start.
+#
+#   docker compose up -d --build
+#
+# Requirements:
+#   * The P21 is paired on this host (normal OS Bluetooth settings, once).
+#   * Host networking + BT caps, so the container can open the RFCOMM socket.
+services:
+  nelko:
+    build: .
+    image: nelko-p21
+    container_name: nelko-p21
+    # Proper PID-1 signal handling / zombie reaping.
+    init: true
+    # AF_BLUETOOTH/RFCOMM needs the host network namespace to see the adapter.
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    # If connecting still fails on your kernel, swap the caps above for:
+    # privileged: true
+    environment:
+      BT: "on"
+      PORT: "8080"
+      # Auto-detected from the mounted BlueZ dir below; set explicitly to skip
+      # detection (this is the paired P21 on this machine):
+      P21_MAC: "8F:2C:99:9E:BF:3E"
+    volumes:
+      # Read-only: lets the server auto-detect the paired P21's MAC.
+      - /var/lib/bluetooth:/var/lib/bluetooth:ro
+    restart: unless-stopped

@@ -1,0 +1,23 @@
+{
+  "appId": "de.fewenk.nelkop21",
+  "productName": "Nelko P21",
+  "directories": {
+    "output": "dist-desktop",
+    "buildResources": "resources"
+  },
+  "files": ["build/**/*", "renderer/**/*", "package.json"],
+  "win": {
+    "target": ["nsis"]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true
+  },
+  "linux": {
+    "target": ["AppImage", "deb"],
+    "category": "Utility"
+  },
+  "mac": {
+    "target": ["dmg"]
+  }
+}

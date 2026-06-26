@@ -1,0 +1,20 @@
+# Keep the Docker build context small and the web build hermetic.
+.git
+.idea
+.venv
+__pycache__
+*.pyc
+
+# Rebuilt inside the image:
+**/node_modules
+app/dist
+
+# Native app shells (not needed for the web/server image):
+app/android
+app/electron
+
+# Local artefacts / captures:
+output_labels
+examples
+*.pcapng
+test-template.*

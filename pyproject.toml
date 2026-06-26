@@ -20,3 +20,10 @@ dependencies = [
 
 [project.scripts]
 nelko-p21-print = "nelko_p21_print:main"
+
+[project.optional-dependencies]
+# Dev-only WebSocket<->Bluetooth bridge (tools/bt_bridge.py), paired with `vite dev`.
+bridge = ["websockets>=12"]
+# All-in-one print-server (tools/server.py): serves the built app + Bluetooth pipe.
+# Normally run via Docker; install locally only to run server.py outside a container.
+server = ["aiohttp>=3.10"]
