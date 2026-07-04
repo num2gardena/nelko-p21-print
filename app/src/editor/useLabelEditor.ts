@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { Canvas, FabricImage, Rect, Textbox } from 'fabric';
 import * as QRCode from 'qrcode';
 import type { LabelSpec } from '../core';
-import { canvasToImageData, DISPLAY_SCALE, editDimensions } from './raster';
+import { canvasToImageData, DISPLAY_SCALE, editDimensions, PADDING } from './raster';
 
 export { DISPLAY_SCALE } from './raster';
 
@@ -44,12 +44,47 @@ export function useLabelEditor(
     if (!el) return;
 
     const canvas = new Canvas(el, {
-      width: editW * DISPLAY_SCALE,
-      height: editH * DISPLAY_SCALE,
-      backgroundColor: '#ffffff',
+      width: (editW + 2 * PADDING) * DISPLAY_SCALE,
+      height: (editH + 2 * PADDING) * DISPLAY_SCALE,
+      backgroundColor: 'transparent',
       enableRetinaScaling: false,
       preserveObjectStacking: true,
+      viewportTransform: [1, 0, 0, 1, PADDING * DISPLAY_SCALE, PADDING * DISPLAY_SCALE],
     });
+    
+    setTimeout(() => {
+      canvas.setViewportTransform([1, 0, 0, 1, PADDING * DISPLAY_SCALE, PADDING * DISPLAY_SCALE]);
+      canvas.requestRenderAll();
+    }, 0);
+
+    canvas.on('before:render', (opt) => {
+      const ctx = opt.ctx;
+      ctx.save();
+      
+      const tx = canvas.viewportTransform ? canvas.viewportTransform[4] : 0;
+      const ty = canvas.viewportTransform ? canvas.viewportTransform[5] : 0;
+      
+      // Draw a soft drop shadow for the physical label block
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 2;
+      
+      // Fill the label background white (at the transformed coordinates)
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(tx, ty, editW * DISPLAY_SCALE, editH * DISPLAY_SCALE);
+      
+      // Turn off shadow for the border
+      ctx.shadowColor = 'transparent';
+      
+      // Draw a subtle border around the label boundary
+      ctx.strokeStyle = '#cccccc';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(tx, ty, editW * DISPLAY_SCALE, editH * DISPLAY_SCALE);
+      
+      ctx.restore();
+    });
+
     fabricRef.current = canvas;
 
     let timer: ReturnType<typeof setTimeout> | null = null;
@@ -218,7 +253,7 @@ export function useLabelEditor(
     if (!canvas) return;
     loadingRef.current = true;
     canvas.remove(...canvas.getObjects());
-    canvas.backgroundColor = '#ffffff';
+    canvas.backgroundColor = 'transparent';
     canvas.requestRenderAll();
     loadingRef.current = false;
     onDirtyRef.current(false);
@@ -238,11 +273,13 @@ export function useLabelEditor(
     if (!canvas) return;
     loadingRef.current = true;
     try {
-      canvas.discardActiveObject();
       // Fabric parses the JSON string and rebuilds every object itself.
       await canvas.loadFromJSON(json);
-      canvas.backgroundColor = '#ffffff';
-      canvas.requestRenderAll();
+      canvas.backgroundColor = 'transparent';
+      setTimeout(() => {
+        canvas.setViewportTransform([1, 0, 0, 1, PADDING * DISPLAY_SCALE, PADDING * DISPLAY_SCALE]);
+        canvas.requestRenderAll();
+      }, 0);
     } finally {
       loadingRef.current = false;
     }

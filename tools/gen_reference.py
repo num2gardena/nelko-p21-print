@@ -7,11 +7,9 @@ Output: app/test/fixtures/reference.json
 
 Run:  .venv/bin/python tools/gen_reference.py
 """
-import base64
 import json
 import os
 import struct
-import sys
 
 from PIL import Image, ImageOps, ImageEnhance
 
