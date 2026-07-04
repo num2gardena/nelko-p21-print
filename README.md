@@ -12,6 +12,9 @@ This repository provides an all-in-one suite for designing and printing labels w
 > [!NOTE]
 > **Origin & Attribution:** This project is an extended fork of the original CLI utility and reverse-engineering work by Merlin Schumacher at [merlinschumacher/nelko-p21-print](https://github.com/merlinschumacher/nelko-p21-print). This fork wraps the original protocol capabilities into a modern, full-featured web application, local print server, and containerized deployment system.
 
+> [!WARNING]
+> **Android/Mobile build is untested:** The Android integration has not been verified. At this time, the only fully working end-to-end printing solution is using the Python Bluetooth/WebSocket bridge or a Docker deployment on a host PC with a Bluetooth Classic connection to the printer.
+
 ---
 
 ## Key Features
