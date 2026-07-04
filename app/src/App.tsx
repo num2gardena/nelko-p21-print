@@ -19,7 +19,7 @@ function App() {
     setPreview(getImageDataRef.current());
   }, []);
 
-  const { canvasElRef, api } = useLabelEditor(spec, handleChange, setDirty);
+  const { canvasElRef, selectedProps, api } = useLabelEditor(spec, handleChange, setDirty);
   getImageDataRef.current = api.getImageData;
 
   // Warn before leaving/refreshing with unsaved changes.
@@ -55,6 +55,7 @@ function App() {
             enhance={enhance}
             onEnhanceChange={setEnhance}
             preview={preview}
+            selectedProps={selectedProps}
           />
         </section>
 

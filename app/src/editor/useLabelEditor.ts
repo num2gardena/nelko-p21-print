@@ -1,10 +1,39 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Canvas, FabricImage, Rect, Textbox } from 'fabric';
 import * as QRCode from 'qrcode';
 import type { LabelSpec } from '../core';
 import { canvasToImageData, DISPLAY_SCALE, editDimensions, PADDING } from './raster';
 
 export { DISPLAY_SCALE } from './raster';
+
+export interface SelectedObjectProps {
+  type: 'textbox' | 'rect' | 'image' | 'qr' | 'barcode';
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  scaleX: number;
+  scaleY: number;
+  angle: number;
+  // Text specific
+  text?: string;
+  fontFamily?: string;
+  fontSize?: number;
+  fontWeight?: string;
+  fontStyle?: string;
+  underline?: boolean;
+  linethrough?: boolean;
+  textAlign?: string;
+  // Rect specific
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: number;
+  rx?: number;
+  ry?: number;
+  // QR / Barcode specific
+  qrText?: string;
+  barcodeText?: string;
+}
 
 export interface LabelEditorApi {
   addText(text?: string): void;
@@ -20,13 +49,84 @@ export interface LabelEditorApi {
   toJSON(): string;
   /** Replace the canvas contents from a serialised design; marks it clean. */
   loadJSON(json: string): Promise<void>;
+  updateSelected(props: Partial<SelectedObjectProps>): Promise<void>;
+}
+
+function getObjectProps(obj: any): SelectedObjectProps | null {
+  if (!obj) return null;
+
+  const type = obj.type;
+  let customType: SelectedObjectProps['type'] = type;
+  if (type === 'image') {
+    if ('qrText' in obj) {
+      customType = 'qr';
+    } else if ('barcodeText' in obj) {
+      customType = 'barcode';
+    }
+  }
+
+  const base = {
+    type: customType,
+    left: Math.round(obj.left / DISPLAY_SCALE),
+    top: Math.round(obj.top / DISPLAY_SCALE),
+    width: Math.round((obj.width * (obj.scaleX ?? 1)) / DISPLAY_SCALE),
+    height: Math.round((obj.height * (obj.scaleY ?? 1)) / DISPLAY_SCALE),
+    scaleX: obj.scaleX ?? 1,
+    scaleY: obj.scaleY ?? 1,
+    angle: Math.round(obj.angle ?? 0),
+  };
+
+  if (type === 'textbox') {
+    return {
+      ...base,
+      text: obj.text ?? '',
+      fontFamily: obj.fontFamily ?? 'sans-serif',
+      fontSize: Math.round((obj.fontSize ?? 16) / DISPLAY_SCALE),
+      fontWeight: obj.fontWeight ?? 'normal',
+      fontStyle: obj.fontStyle ?? 'normal',
+      underline: !!obj.underline,
+      linethrough: !!obj.linethrough,
+      textAlign: obj.textAlign ?? 'left',
+    };
+  }
+
+  if (type === 'rect') {
+    return {
+      ...base,
+      fill: obj.fill ?? 'transparent',
+      stroke: obj.stroke ?? '#000000',
+      strokeWidth: Math.round((obj.strokeWidth ?? 1) / DISPLAY_SCALE),
+      rx: Math.round((obj.rx ?? 0) / DISPLAY_SCALE),
+      ry: Math.round((obj.ry ?? 0) / DISPLAY_SCALE),
+    };
+  }
+
+  if (customType === 'qr') {
+    return {
+      ...base,
+      qrText: obj.qrText ?? '',
+    };
+  }
+
+  if (customType === 'barcode') {
+    return {
+      ...base,
+      barcodeText: obj.barcodeText ?? '',
+    };
+  }
+
+  return base;
 }
 
 export function useLabelEditor(
   spec: LabelSpec,
   onChange: () => void,
   onDirtyChange: (dirty: boolean) => void,
-): { canvasElRef: React.RefObject<HTMLCanvasElement | null>; api: LabelEditorApi } {
+): {
+  canvasElRef: React.RefObject<HTMLCanvasElement | null>;
+  selectedProps: SelectedObjectProps | null;
+  api: LabelEditorApi;
+} {
   const canvasElRef = useRef<HTMLCanvasElement | null>(null);
   const fabricRef = useRef<Canvas | null>(null);
   const onChangeRef = useRef(onChange);
@@ -36,6 +136,8 @@ export function useLabelEditor(
   // True while we mutate the canvas programmatically (load / new), so those
   // changes are not counted as user edits for the dirty flag.
   const loadingRef = useRef(false);
+
+  const [selectedProps, setSelectedProps] = useState<SelectedObjectProps | null>(null);
 
   const { w: editW, h: editH } = editDimensions(spec);
 
@@ -93,6 +195,11 @@ export function useLabelEditor(
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => onChangeRef.current(), 80);
     };
+    const updateSelectionState = () => {
+      const active = canvas.getActiveObject();
+      setSelectedProps(getObjectProps(active));
+    };
+
     for (const ev of [
       'object:added',
       'object:modified',
@@ -101,6 +208,12 @@ export function useLabelEditor(
     ] as const) {
       canvas.on(ev, notify);
     }
+
+    canvas.on('selection:created', updateSelectionState);
+    canvas.on('selection:updated', updateSelectionState);
+    canvas.on('selection:cleared', () => setSelectedProps(null));
+    canvas.on('object:modified', updateSelectionState);
+    canvas.on('text:changed', updateSelectionState);
 
     // Delete / Backspace removes the selection, unless a text object is being
     // edited or focus is in a form field.
@@ -293,8 +406,127 @@ export function useLabelEditor(
     return canvasToImageData(canvas, spec);
   }, [spec]);
 
+  const updateSelected = useCallback(
+    async (props: Partial<SelectedObjectProps>) => {
+      const canvas = fabricRef.current;
+      if (!canvas) return;
+      const active = canvas.getActiveObject();
+      if (!active) return;
+
+      // Handle common positioning and sizing
+      if (props.left !== undefined) {
+        active.set('left', props.left * DISPLAY_SCALE);
+      }
+      if (props.top !== undefined) {
+        active.set('top', props.top * DISPLAY_SCALE);
+      }
+      if (props.angle !== undefined) {
+        active.set('angle', props.angle);
+      }
+
+      // Sizing
+      if (props.width !== undefined) {
+        if (active.type === 'textbox' || active.type === 'rect') {
+          active.set({
+            width: props.width * DISPLAY_SCALE,
+            scaleX: 1,
+          });
+        } else {
+          // Image / QR / Barcode
+          const nativeWidth = active.width ?? 1;
+          active.set('scaleX', (props.width * DISPLAY_SCALE) / nativeWidth);
+        }
+      }
+      if (props.height !== undefined) {
+        if (active.type === 'rect') {
+          active.set({
+            height: props.height * DISPLAY_SCALE,
+            scaleY: 1,
+          });
+        } else if (active.type !== 'textbox') {
+          // Image / QR / Barcode
+          const nativeHeight = active.height ?? 1;
+          active.set('scaleY', (props.height * DISPLAY_SCALE) / nativeHeight);
+        }
+      }
+
+      // Text-specific properties
+      if (active.type === 'textbox') {
+        const textbox = active as Textbox;
+        if (props.text !== undefined) textbox.set('text', props.text);
+        if (props.fontFamily !== undefined) textbox.set('fontFamily', props.fontFamily);
+        if (props.fontSize !== undefined) textbox.set('fontSize', props.fontSize * DISPLAY_SCALE);
+        if (props.fontWeight !== undefined) textbox.set('fontWeight', props.fontWeight);
+        if (props.fontStyle !== undefined) textbox.set('fontStyle', props.fontStyle);
+        if (props.underline !== undefined) textbox.set('underline', props.underline);
+        if (props.linethrough !== undefined) textbox.set('linethrough', props.linethrough);
+        if (props.textAlign !== undefined) textbox.set('textAlign', props.textAlign);
+      }
+
+      // Rect-specific properties
+      if (active.type === 'rect') {
+        const rect = active as Rect;
+        if (props.fill !== undefined) rect.set('fill', props.fill);
+        if (props.stroke !== undefined) rect.set('stroke', props.stroke);
+        if (props.strokeWidth !== undefined) rect.set('strokeWidth', props.strokeWidth * DISPLAY_SCALE);
+        if (props.rx !== undefined) rect.set({ rx: props.rx * DISPLAY_SCALE, ry: props.rx * DISPLAY_SCALE });
+      }
+
+      // QR-specific properties
+      if ('qrText' in active && props.qrText !== undefined) {
+        const qrText = props.qrText || ' ';
+        active.set('qrText', qrText);
+        try {
+          const url = await QRCode.toDataURL(qrText, { margin: 1, scale: 8 });
+          const imgEl = new Image();
+          imgEl.src = url;
+          await new Promise((resolve) => {
+            imgEl.onload = resolve;
+          });
+          (active as any).setElement(imgEl);
+        } catch (err) {
+          console.error('Error updating QR code:', err);
+        }
+      }
+
+      // Barcode-specific properties
+      if ('barcodeText' in active && props.barcodeText !== undefined) {
+        const barcodeText = props.barcodeText || '0';
+        active.set('barcodeText', barcodeText);
+        try {
+          const { toCanvas } = await import('bwip-js/browser');
+          const off = document.createElement('canvas');
+          toCanvas(off, {
+            bcid: 'code128',
+            text: barcodeText,
+            scale: 3,
+            height: 10,
+            includetext: true,
+            textxalign: 'center',
+          });
+          const imgEl = new Image();
+          imgEl.src = off.toDataURL('image/png');
+          await new Promise((resolve) => {
+            imgEl.onload = resolve;
+          });
+          (active as any).setElement(imgEl);
+        } catch (err) {
+          console.error('Error updating Barcode:', err);
+        }
+      }
+
+      canvas.requestRenderAll();
+      // Notify parent about changes
+      canvas.fire('object:modified', { target: active });
+      // Update local state props immediately
+      setSelectedProps(getObjectProps(active));
+    },
+    [],
+  );
+
   return {
     canvasElRef,
+    selectedProps,
     api: {
       addText,
       addRect,
@@ -306,6 +538,7 @@ export function useLabelEditor(
       getImageData,
       toJSON,
       loadJSON,
+      updateSelected,
     },
   };
 }
