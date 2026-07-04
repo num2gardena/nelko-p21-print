@@ -1,7 +1,7 @@
 # Desktop / "printer is here" deployment.
 #
 # Serves the web app AND talks to the P21 over Bluetooth, all in one container.
-# Open http://localhost:8080 and print — no separate bridge to start.
+# Access via HTTPS (https://localhost) for secure context / Web Serial support.
 #
 #   docker compose up -d --build
 #
@@ -27,8 +27,31 @@ services:
       PORT: "8080"
       # Auto-detected from the mounted BlueZ dir below; set explicitly to skip
       # detection (this is the paired P21 on this machine):
-      P21_MAC: "8F:2C:99:9E:BF:3E"
+      # P21_MAC: "8F:2C:99:9E:BF:3E"
     volumes:
       # Read-only: lets the server auto-detect the paired P21's MAC.
       - /var/lib/bluetooth:/var/lib/bluetooth:ro
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nelko.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.nelko.entrypoints=websecure"
+      - "traefik.http.routers.nelko.tls=true"
+      - "traefik.http.services.nelko.loadbalancer.server.url=http://127.0.0.1:8080"
+
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    init: true
+    network_mode: host
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:8122"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:8123"
+      - "--entrypoints.websecure.http.tls=true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: unless-stopped

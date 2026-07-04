@@ -21,7 +21,7 @@ This repository provides an all-in-one suite for designing and printing labels w
 
 - **Interactive Web Editor:** A rich, responsive WYSIWYG canvas-based label designer built with React, TypeScript, and Vite.
 - **Multiple Transport Methods:**
-  - **Web Serial:** Print directly from supported browsers (Chrome, Edge, Opera) to the printer without needing a backend server.
+  - **Web Serial:** Print directly from supported browsers (Chrome, Edge, Opera, or Brave with "Serial ports" enabled) to the printer without needing a backend server.
   - **WebSocket Bridge:** Bridge print commands from a headless server to the printer over a persistent Bluetooth Classic RFCOMM connection.
   - **Capacitor & Electron Ready:** Configured for Android/iOS builds (Capacitor) and desktop wrappers (Electron).
 - **All-in-One Print Server:** A Python-based `aiohttp` server that serves the compiled static web app and handles Bluetooth communication asynchronously.

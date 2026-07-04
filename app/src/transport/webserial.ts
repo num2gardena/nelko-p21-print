@@ -33,8 +33,17 @@ export class WebSerialTransport implements PrinterTransport {
 
   async listDevices(): Promise<PrinterDevice[]> {
     if (!isWebSerialSupported()) {
+      const isHttp = typeof window !== 'undefined' && !window.isSecureContext;
+      if (isHttp) {
+        throw new Error(
+          'Web Serial is not available because this site is loaded over a non-secure connection (HTTP). ' +
+            'Web Serial requires a secure context. Please access the site via HTTPS or localhost/127.0.0.1.',
+        );
+      }
       throw new Error(
-        'Web Serial is not available in this browser. Use desktop Chrome or Edge.',
+        'Web Serial is not supported by your browser or is disabled. ' +
+          'If you are using Brave, make sure "Serial ports" is enabled in brave://settings/content/serialPorts. ' +
+          'Note that Firefox and Safari do not currently support Web Serial.',
       );
     }
     // Must run inside the user gesture (the Connect click).
