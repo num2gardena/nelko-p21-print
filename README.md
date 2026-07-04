@@ -11,6 +11,7 @@ This repository provides an all-in-one suite for designing and printing labels w
 
 > [!NOTE]
 > **Origin & Attribution:** This project is an extended fork of the original CLI utility and reverse-engineering work by Merlin Schumacher at [merlinschumacher/nelko-p21-print](https://github.com/merlinschumacher/nelko-p21-print). This fork wraps the original protocol capabilities into a modern, full-featured web application, local print server, and containerized deployment system.
+> This project was created as a personal project using OpenCode Go and Google Antigravity and serves the purpose of making the work by [merlinschumacher](https://github.com/merlinschumacher) more usable to end users. 
 
 > [!WARNING]
 > **Platform Support & Working Deployments:**
