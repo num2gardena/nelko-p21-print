@@ -12,7 +12,7 @@ This repository provides an all-in-one suite for designing and printing labels w
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
 - **Interactive Web Editor:** A rich, responsive WYSIWYG canvas-based label designer built with React, TypeScript, and Vite.
 - **Multiple Transport Methods:**
@@ -25,7 +25,7 @@ This repository provides an all-in-one suite for designing and printing labels w
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 - [app/](file:///home/felix/Projects/P21-Web/nelko-p21-print/app): The web editor frontend (React + TS + Vite + Fabric.js).
 - [src/](file:///home/felix/Projects/P21-Web/nelko-p21-print/src): Core Python modules and driver logic for the printer.
@@ -37,7 +37,7 @@ This repository provides an all-in-one suite for designing and printing labels w
 
 ---
 
-## 🚀 Setup & Usage
+## Setup & Usage
 
 ### 1. Docker Compose (Recommended)
 
@@ -106,7 +106,7 @@ python tools/bt_bridge.py
 
 ---
 
-## 🔍 The Captured Traffic & Printer Protocol
+## The Captured Traffic & Printer Protocol
 
 The printer communication runs via SPP/RFCOMM (serial Bluetooth). The printer also contains an internal NFC reader to identify the official label rolls, acting as a form of soft DRM (complaining if generic labels are used).
 
@@ -132,7 +132,7 @@ The printer communication runs via SPP/RFCOMM (serial Bluetooth). The printer al
 
 ---
 
-## 📝 License & Contributing
+## License & Contributing
 
 This project is licensed under the MIT License. Contributions are welcome!
 Please check the original project's repository [merlinschumacher/nelko-p21-print](https://github.com/merlinschumacher/nelko-p21-print) for reverse engineering notes and protocol captures.
