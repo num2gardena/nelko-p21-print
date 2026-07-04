@@ -26,12 +26,12 @@
   --muted: #676475;
   
   /* Gradient & Glowing Accents */
-  --accent-start: #a855f7;
-  --accent-end: #6366f1;
-  --accent: #b86eff;
-  --accent-bg: rgba(168, 85, 247, 0.12);
-  --accent-border: rgba(168, 85, 247, 0.35);
-  --accent-glow: rgba(168, 85, 247, 0.25);
+  --accent-start: #2563eb;
+  --accent-end: #1d4ed8;
+  --accent: #60a5fa;
+  --accent-bg: rgba(37, 99, 235, 0.12);
+  --accent-border: rgba(37, 99, 235, 0.35);
+  --accent-glow: rgba(37, 99, 235, 0.25);
   
   /* Status Colors */
   --success: #10b981;
@@ -60,12 +60,12 @@
   --muted: #9591a5;
   
   /* Gradient & Glowing Accents */
-  --accent-start: #9333ea;
-  --accent-end: #4f46e5;
-  --accent: #7c3aed;
-  --accent-bg: rgba(124, 58, 237, 0.08);
-  --accent-border: rgba(124, 58, 237, 0.25);
-  --accent-glow: rgba(124, 58, 237, 0.15);
+  --accent-start: #1d4ed8;
+  --accent-end: #1e40af;
+  --accent: #2563eb;
+  --accent-bg: rgba(29, 78, 216, 0.08);
+  --accent-border: rgba(29, 78, 216, 0.25);
+  --accent-glow: rgba(29, 78, 216, 0.15);
   
   /* Status Colors */
   --success: #059669;
