@@ -7,7 +7,7 @@
 
 This repository provides an all-in-one suite for designing and printing labels with the **Nelko P21 Label Printer** without relying on the official proprietary app.
 
-![Nelko P21 Web Editor Preview](screenshot.png?v=2)
+![Nelko P21 Web Editor Preview](screenshot-v1.png)
 
 > [!NOTE]
 > **Origin & Attribution:** This project is an extended fork of the original CLI utility and reverse-engineering work by Merlin Schumacher at [merlinschumacher/nelko-p21-print](https://github.com/merlinschumacher/nelko-p21-print). This fork wraps the original protocol capabilities into a modern, full-featured web application, local print server, and containerized deployment system.
