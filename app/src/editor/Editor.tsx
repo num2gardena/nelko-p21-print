@@ -131,43 +131,106 @@ export function Editor({
 
   return (
     <div className="editor">
-      <div className="editor__toolbar">
-        <button type="button" onClick={() => api.addText()}>
-          Text
+      {/* 1. Left Toolbox (Vertical Toolbar) */}
+      <div className="editor__toolbox">
+        <div className="toolbox__section-title">Tools</div>
+        
+        <button
+          type="button"
+          onClick={() => api.addText()}
+          className="toolbox__btn"
+          title="Add Text (T)"
+        >
+          <svg viewBox="0 0 24 24" className="toolbox__icon">
+            <path d="M4 7V4h16v3M9 20h6M12 4v16" />
+          </svg>
+          <span className="toolbox__label">Text</span>
         </button>
-        <button type="button" onClick={api.addRect}>
-          Box
+
+        <button
+          type="button"
+          onClick={api.addRect}
+          className="toolbox__btn"
+          title="Add Box (R)"
+        >
+          <svg viewBox="0 0 24 24" className="toolbox__icon">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+          </svg>
+          <span className="toolbox__label">Box</span>
         </button>
-        <button type="button" onClick={onAddQr}>
-          QR
+
+        <button
+          type="button"
+          onClick={onAddQr}
+          className="toolbox__btn"
+          title="Add QR Code (Q)"
+        >
+          <svg viewBox="0 0 24 24" className="toolbox__icon">
+            <rect x="3" y="3" width="8" height="8" rx="1" />
+            <rect x="13" y="3" width="8" height="8" rx="1" />
+            <rect x="3" y="13" width="8" height="8" rx="1" />
+            <rect x="13" y="13" width="4" height="4" />
+            <rect x="17" y="17" width="4" height="4" />
+            <rect x="13" y="17" width="2" height="4" />
+            <rect x="17" y="13" width="4" height="2" />
+          </svg>
+          <span className="toolbox__label">QR Code</span>
         </button>
-        <button type="button" onClick={onAddBarcode}>
-          Barcode
+
+        <button
+          type="button"
+          onClick={onAddBarcode}
+          className="toolbox__btn"
+          title="Add Barcode (B)"
+        >
+          <svg viewBox="0 0 24 24" className="toolbox__icon">
+            <rect x="3" y="4" width="2" height="16" />
+            <rect x="7" y="4" width="1" height="16" />
+            <rect x="10" y="4" width="3" height="16" />
+            <rect x="15" y="4" width="1" height="16" />
+            <rect x="18" y="4" width="3" height="16" />
+          </svg>
+          <span className="toolbox__label">Barcode</span>
         </button>
-        <label className="editor__file">
-          Image
+
+        <label className="toolbox__btn toolbox__file-label" title="Upload Image (I)">
+          <svg viewBox="0 0 24 24" className="toolbox__icon">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="m21 15-5-5L5 21" />
+          </svg>
+          <span className="toolbox__label">Image</span>
           <input type="file" accept="image/*" onChange={onAddImage} hidden />
         </label>
-        <button type="button" onClick={api.deleteSelected}>
-          Delete
+
+        <div className="toolbox__divider" />
+
+        <button
+          type="button"
+          onClick={api.deleteSelected}
+          className="toolbox__btn toolbox__btn--danger"
+          disabled={!selectedProps}
+          title="Delete Element (Del)"
+        >
+          <svg viewBox="0 0 24 24" className="toolbox__icon">
+            <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6" />
+          </svg>
+          <span className="toolbox__label">Delete</span>
         </button>
-        <span className="editor__spacer" />
-        <label className="editor__toggle">
-          <input
-            type="checkbox"
-            checked={enhance}
-            onChange={(e) => onEnhanceChange(e.target.checked)}
-          />
-          Enhance
-        </label>
       </div>
 
+      {/* 2. Center Canvas Viewport */}
       <div className="editor__stage">
-        <div className="editor__canvas-wrap">
-          <canvas ref={canvasElRef} />
+        <div className="editor__canvas-viewport">
+          <div className="editor__canvas-wrap">
+            <canvas ref={canvasElRef} />
+          </div>
         </div>
+      </div>
 
-        {/* Element Property Editor */}
+      {/* 3. Right Sidebar Inspector (Properties + Print Preview) */}
+      <div className="editor__inspector">
+        {/* Properties Section */}
         <div className="editor__properties">
           <div className="properties__header">
             <h2>Properties</h2>
@@ -437,21 +500,39 @@ export function Editor({
             </div>
           ) : (
             <div className="properties__empty">
-              <svg className="properties__empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2" strokeDasharray="4 4" />
-                <path d="M9 12h6" />
-                <path d="M12 9v6" />
+              <svg className="properties__empty-icon" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none" strokeDasharray="4 4" />
+                <path d="M9 12h6" stroke="currentColor" strokeWidth="1.5" />
+                <path d="M12 9v6" stroke="currentColor" strokeWidth="1.5" />
               </svg>
               <p>Select an element on the canvas to customize its settings</p>
             </div>
           )}
         </div>
 
-        <div className="editor__preview">
-          <div className="editor__preview-label">
-            Print preview · {spec.printWidthDots}×{spec.printHeightDots} dots
+        {/* Live Print Preview Section */}
+        <div className="editor__preview-panel">
+          <div className="preview-panel__header">
+            <h3>Print Preview</h3>
+            <span className="preview-panel__size">
+              {spec.printWidthDots}×{spec.printHeightDots} dots
+            </span>
           </div>
-          <PrintPreview source={preview} spec={spec} enhance={enhance} />
+          
+          <div className="preview-panel__content">
+            <PrintPreview source={preview} spec={spec} enhance={enhance} />
+          </div>
+
+          <div className="preview-panel__footer">
+            <label className="preview-panel__toggle">
+              <input
+                type="checkbox"
+                checked={enhance}
+                onChange={(e) => onEnhanceChange(e.target.checked)}
+              />
+              <span className="toggle__text">Dither Enhancement</span>
+            </label>
+          </div>
         </div>
       </div>
     </div>

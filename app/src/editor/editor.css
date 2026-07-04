@@ -1,164 +1,164 @@
+/* Modern Label Editor Workspace Styles */
+
 .editor {
   display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--bg);
+}
+
+/* 1. Left Toolbox (Vertical Toolbar) */
+.editor__toolbox {
+  width: 72px;
+  background-color: var(--panel-bg);
+  border-right: 1px solid var(--border);
+  display: flex;
   flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
   gap: 12px;
+  flex-shrink: 0;
+  z-index: 5;
 }
 
-.designbar {
+.toolbox__section-title {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  margin-bottom: 4px;
+}
+
+.toolbox__btn {
+  width: 52px;
+  height: 52px;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding-bottom: 12px;
-  margin-bottom: 12px;
-  border-bottom: 1px solid var(--border);
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 4px;
+  padding: 0;
+  position: relative;
 }
 
-.designbar button,
-.designbar__import {
-  font-size: 13px;
-  line-height: normal;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: #fff;
-  color: #1a1a1a;
+.toolbox__btn:hover {
+  background-color: var(--panel-bg-alt);
+  color: var(--text-h);
+  transform: translateY(-1px);
+}
+
+.toolbox__btn:active {
+  background-color: var(--accent-bg);
+  color: var(--accent);
+}
+
+.toolbox__btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  transform: none !important;
+  background: transparent !important;
+}
+
+.toolbox__icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.toolbox__label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+}
+
+.toolbox__file-label {
   cursor: pointer;
 }
 
-.designbar button:hover,
-.designbar__import:hover {
-  border-color: #999;
+.toolbox__divider {
+  width: 32px;
+  height: 1px;
+  background-color: var(--border);
+  margin: 6px 0;
 }
 
-.designbar__import {
-  display: inline-flex;
-  align-items: center;
-}
-
-.designbar__open {
-  font-size: 13px;
-  padding: 5px 8px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: #fff;
-}
-
-.designbar__name {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.designbar__name input {
-  font-size: 13px;
-  width: 120px;
-  padding: 5px 8px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-}
-
-.designbar__dirty {
-  color: #d97706;
-  font-size: 11px;
-  line-height: 1;
-}
-
-.designbar__delete {
-  color: #c0392b;
-}
-
-.editor__toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-}
-
-.editor__toolbar button,
-.editor__file {
-  font-size: 13px;
-  line-height: normal;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: #fff;
-  color: #1a1a1a;
-  cursor: pointer;
-}
-
-.editor__toolbar button:hover,
-.editor__file:hover {
-  border-color: #999;
-}
-
-.editor__file {
-  display: inline-flex;
-  align-items: center;
-}
-
-.editor__spacer {
-  flex: 1;
-}
-
-.editor__toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
+.toolbox__btn--danger {
   color: var(--muted);
 }
 
+.toolbox__btn--danger:hover:not(:disabled) {
+  background-color: var(--danger-bg);
+  color: var(--danger);
+}
+
+/* 2. Center Canvas Viewport */
 .editor__stage {
+  flex: 1;
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  align-items: flex-start;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--bg);
+  position: relative;
+}
+
+.editor__canvas-viewport {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 40px;
+  overflow: auto;
+  /* Grid pattern background */
+  background-image: radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: center;
 }
 
 .editor__canvas-wrap {
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  /* checkerboard so the white label is visible on white UI */
-  background-image:
-    linear-gradient(45deg, #eee 25%, transparent 25%),
-    linear-gradient(-45deg, #eee 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #eee 75%),
-    linear-gradient(-45deg, transparent 75%, #eee 75%);
-  background-size: 16px 16px;
-  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
-  line-height: 0;
-}
-
-.editor__preview {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.editor__preview-label {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.preview-canvas {
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  image-rendering: pixelated;
-}
-
-/* Property Editor Styles */
-.editor__properties {
-  display: flex;
-  flex-direction: column;
-  width: 280px;
-  min-height: 408px;
-  border: 1px solid var(--border);
+  padding: 10px;
+  background: #ffffff;
   border-radius: 8px;
-  background: var(--panel-bg);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  font-size: 13px;
-  color: var(--text);
+  box-shadow: 
+    0 30px 60px -15px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 0 0 1px var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.3s;
+}
+
+/* Fabric canvas elements */
+.canvas-container {
+  margin: 0 auto;
+}
+
+/* 3. Right Sidebar Inspector */
+.editor__inspector {
+  width: 300px;
+  border-left: 1px solid var(--border);
+  background-color: var(--panel-bg);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.editor__properties {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
@@ -166,97 +166,98 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 14px;
-  background: #fbfbfc;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--border);
+  background-color: rgba(255, 255, 255, 0.01);
 }
 
 .properties__header h2 {
   font-size: 14px;
   font-weight: 600;
-  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
   color: var(--text-h);
 }
 
 .properties__badge {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
-  padding: 2px 6px;
+  padding: 2px 8px;
   border-radius: 4px;
   letter-spacing: 0.5px;
 }
 
 .properties__badge--textbox {
-  background: rgba(170, 59, 255, 0.1);
-  color: #aa3bff;
-  border: 1px solid rgba(170, 59, 255, 0.2);
+  background: rgba(168, 85, 247, 0.1);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.2);
 }
 
 .properties__badge--rect {
   background: rgba(14, 165, 233, 0.1);
-  color: #0284c7;
+  color: #38bdf8;
   border: 1px solid rgba(14, 165, 233, 0.2);
 }
 
 .properties__badge--qr {
   background: rgba(16, 185, 129, 0.1);
-  color: #059669;
+  color: #34d399;
   border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .properties__badge--barcode {
   background: rgba(245, 158, 11, 0.1);
-  color: #d97706;
+  color: #fbbf24;
   border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
 .properties__badge--image {
-  background: rgba(107, 114, 128, 0.1);
-  color: #4b5563;
-  border: 1px solid rgba(107, 114, 128, 0.2);
+  background: rgba(156, 163, 175, 0.1);
+  color: #d1d5db;
+  border: 1px solid rgba(156, 163, 175, 0.2);
 }
 
 .properties__scrollable {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  padding: 14px;
-  gap: 12px;
-  overflow-y: auto;
-  max-height: 480px;
+  gap: 18px;
 }
 
 .properties__section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .properties__section h3 {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--muted);
-  margin: 0 0 2px 0;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  margin-bottom: 2px;
 }
 
 .properties__section-divider {
   height: 1px;
   background: var(--border);
-  margin: 6px 0;
+  margin: 4px 0;
 }
 
 .properties__field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .properties__label {
   font-size: 11px;
   font-weight: 500;
-  color: var(--muted);
+  color: var(--text);
 }
 
 .properties__input,
@@ -267,8 +268,8 @@
   color: var(--text-h);
   border: 1px solid var(--border);
   border-radius: 6px;
-  padding: 6px 8px;
-  background: #fff;
+  padding: 8px 10px;
+  background-color: var(--panel-bg-alt);
   transition: border-color 0.2s, box-shadow 0.2s;
   width: 100%;
 }
@@ -282,14 +283,15 @@
 }
 
 .properties__input:disabled {
-  background: #f5f5f5;
+  background-color: rgba(255, 255, 255, 0.02);
   color: var(--muted);
   cursor: not-allowed;
+  border-color: var(--border);
 }
 
 .properties__textarea {
   resize: vertical;
-  min-height: 50px;
+  min-height: 60px;
 }
 
 .properties__row {
@@ -312,7 +314,7 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   overflow: hidden;
-  background: #f9f9fb;
+  background-color: var(--panel-bg-alt);
 }
 
 .properties__toggle-btn {
@@ -320,7 +322,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 32px;
+  height: 34px;
   border: none;
   border-right: 1px solid var(--border);
   background: transparent;
@@ -328,7 +330,7 @@
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.15s, color 0.15s;
+  transition: all 0.15s;
   padding: 0;
 }
 
@@ -337,12 +339,12 @@
 }
 
 .properties__toggle-btn:hover {
-  background: #f0eff2;
+  background-color: rgba(255, 255, 255, 0.04);
   color: var(--text-h);
 }
 
 .properties__toggle-btn--active {
-  background: var(--accent-bg) !important;
+  background-color: var(--accent-bg) !important;
   color: var(--accent) !important;
   font-weight: 600;
 }
@@ -350,8 +352,8 @@
 .properties__row-angle {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 6px;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 .properties__range {
@@ -372,11 +374,12 @@
   border-radius: 50%;
   background: var(--accent);
   cursor: pointer;
-  transition: transform 0.1s;
+  transition: transform 0.1s, box-shadow 0.15s;
 }
 
 .properties__range::-webkit-slider-thumb:hover {
   transform: scale(1.2);
+  box-shadow: 0 0 8px var(--accent-glow);
 }
 
 .properties__empty {
@@ -387,25 +390,220 @@
   padding: 40px 20px;
   text-align: center;
   color: var(--muted);
-  gap: 12px;
+  gap: 16px;
   height: 100%;
-  min-height: 300px;
+  min-height: 260px;
 }
 
 .properties__empty-icon {
-  width: 32px;
-  height: 32px;
-  color: var(--border);
+  width: 40px;
+  height: 40px;
+  color: var(--border-focus);
 }
 
 .properties__empty p {
-  font-size: 13px;
+  font-size: 12px;
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.5;
+  max-width: 200px;
 }
 
 .properties__hint {
   font-size: 11px;
   color: var(--muted);
   margin-top: -2px;
+}
+
+/* 4. Live Print Preview Panel */
+.editor__preview-panel {
+  border-top: 1px solid var(--border);
+  background-color: var(--panel-bg-alt);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.preview-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.preview-panel__header h3 {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+}
+
+.preview-panel__size {
+  font-size: 9px;
+  font-family: var(--mono);
+  color: var(--accent);
+  background-color: var(--accent-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.preview-panel__content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background-color: #050407;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  min-height: 120px;
+  overflow: hidden;
+}
+
+.preview-canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  image-rendering: pixelated;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+  border-radius: 2px;
+  background-color: #ffffff;
+}
+
+.preview-panel__footer {
+  display: flex;
+  align-items: center;
+}
+
+.preview-panel__toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.preview-panel__toggle input {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.toggle__text {
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.preview-panel__toggle:hover .toggle__text {
+  color: var(--text-h);
+}
+
+
+/* 5. DesignBar (Top global header items) */
+.designbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.designbar__open {
+  background-color: var(--panel-bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.designbar__open:hover {
+  border-color: var(--border-focus);
+  color: var(--text-h);
+}
+
+.designbar__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.designbar__name input {
+  font-size: 13px;
+  font-weight: 600;
+  width: 140px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-h);
+  transition: all 0.2s;
+}
+
+.designbar__name input:hover {
+  background-color: var(--panel-bg-alt);
+  border-color: var(--border);
+}
+
+.designbar__name input:focus {
+  background-color: var(--panel-bg-alt);
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-bg);
+}
+
+.designbar__dirty {
+  color: var(--warning);
+  font-size: 12px;
+  margin-left: 2px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.designbar button,
+.designbar__import {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: normal;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: var(--panel-bg-alt);
+  color: var(--text-h);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.designbar button:hover,
+.designbar__import:hover {
+  background-color: var(--border);
+  border-color: var(--border-focus);
+}
+
+.designbar__import {
+  position: relative;
+}
+
+.designbar__delete {
+  color: var(--danger) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.designbar__delete:hover {
+  background-color: var(--danger-bg) !important;
+  border-color: var(--danger) !important;
+}
+
+.editor__spacer {
+  flex: 1;
 }

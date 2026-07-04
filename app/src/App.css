@@ -1,82 +1,106 @@
-:root {
-  --border: #d4d4d8;
-  --muted: #71717a;
-  --bg: #fafafa;
-  --panel-bg: #ffffff;
-}
-
-* {
-  box-sizing: border-box;
-}
-
 .app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  text-align: left;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--bg);
 }
 
 .app__header {
   display: flex;
-  align-items: baseline;
-  gap: 16px;
-  padding: 12px 20px;
+  align-items: center;
+  gap: 20px;
+  padding: 0 20px;
+  height: 56px;
+  background-color: var(--panel-bg);
   border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  z-index: 10;
 }
 
 .app__header h1 {
   font-size: 18px;
+  font-weight: 700;
   margin: 0;
-}
-
-.app__meta {
-  font-size: 13px;
-  color: var(--muted);
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .app__main {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 280px;
+  grid-template-columns: 1fr 320px;
+  overflow: hidden;
+  height: calc(100vh - 56px);
+}
+
+/* Sidebar for Device connectivity & Batch print */
+.panel--side {
+  background-color: var(--panel-bg);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
   gap: 16px;
-  padding: 16px 20px;
-}
-
-@media (max-width: 720px) {
-  .app__main {
-    grid-template-columns: 1fr;
-  }
-}
-
-.panel {
-  background: var(--panel-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
-}
-
-.panel h2 {
-  font-size: 14px;
-  margin: 0 0 4px;
+  padding: 20px;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .panel--side h2 {
-  margin-top: 16px;
-}
-
-.panel--side h2:first-child {
-  margin-top: 0;
-}
-
-.panel__hint {
-  font-size: 13px;
-  color: var(--muted);
-  margin: 0 0 8px;
-}
-
-.app__footer {
-  padding: 10px 20px;
-  border-top: 1px solid var(--border);
   font-size: 12px;
-  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  color: var(--text-h);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+
+.panel--editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg);
+}
+
+/* Responsive collapse on smaller viewports */
+@media (max-width: 960px) {
+  .app__main {
+    grid-template-columns: 1fr;
+  }
+  .panel--side {
+    display: none; /* Hide sidebar or stack, standard for labels is tablet/desktop preferred */
+  }
+}
+
+.theme-toggle {
+  background-color: var(--panel-bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  background-color: var(--border);
+  border-color: var(--border-focus);
+  color: var(--text-h);
+}
+

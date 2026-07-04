@@ -1,87 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* Typography shared configuration */
+  --sans: 'Outfit', system-ui, -apple-system, sans-serif;
+  --heading: 'Outfit', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light;
-  color: var(--text);
-  background: var(--bg);
+  font: 15px/1.5 var(--sans);
+  letter-spacing: 0.2px;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+/* Premium Dark Theme Palette */
+:root, [data-theme="dark"] {
+  --bg: #09080d;
+  --panel-bg: #121118;
+  --panel-bg-alt: #1a1823;
+  --border: #222030;
+  --border-focus: #3e3a58;
+  --text: #9f9bad;
+  --text-h: #ffffff;
+  --muted: #676475;
+  
+  /* Gradient & Glowing Accents */
+  --accent-start: #a855f7;
+  --accent-end: #6366f1;
+  --accent: #b86eff;
+  --accent-bg: rgba(168, 85, 247, 0.12);
+  --accent-border: rgba(168, 85, 247, 0.35);
+  --accent-glow: rgba(168, 85, 247, 0.25);
+  
+  /* Status Colors */
+  --success: #10b981;
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.1);
+  
+  --code-bg: #1e1b29;
+  --shadow: rgba(0, 0, 0, 0.4) 0 10px 30px -10px, rgba(0, 0, 0, 0.2) 0 4px 12px;
+  color-scheme: dark;
+  --text-color: var(--text);
+  --bg-color: var(--bg);
+}
+
+/* Premium Light Theme Palette */
+[data-theme="light"] {
+  --bg: #f4f3f6;
+  --panel-bg: #ffffff;
+  --panel-bg-alt: #faf9fc;
+  --border: #dfdde4;
+  --border-focus: #a8a3c0;
+  --text: #595568;
+  --text-h: #121019;
+  --muted: #9591a5;
+  
+  /* Gradient & Glowing Accents */
+  --accent-start: #9333ea;
+  --accent-end: #4f46e5;
+  --accent: #7c3aed;
+  --accent-bg: rgba(124, 58, 237, 0.08);
+  --accent-border: rgba(124, 58, 237, 0.25);
+  --accent-glow: rgba(124, 58, 237, 0.15);
+  
+  /* Status Colors */
+  --success: #059669;
+  --success-bg: rgba(5, 150, 105, 0.08);
+  --warning: #d97706;
+  --warning-bg: rgba(217, 119, 6, 0.08);
+  --danger: #dc2626;
+  --danger-bg: rgba(220, 38, 38, 0.08);
+  
+  --code-bg: #eae8f2;
+  --shadow: rgba(18, 16, 25, 0.08) 0 10px 30px -10px, rgba(18, 16, 25, 0.04) 0 4px 12px;
+  color-scheme: light;
+  --text-color: var(--text);
+  --bg-color: var(--bg);
+}
+
+:root {
+  color: var(--text-color, var(--text));
+  background: var(--bg-color, var(--bg));
+}
+
+* {
+  box-sizing: border-box;
 }
 
 #root {
   width: 100%;
-  min-height: 100svh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  overflow: hidden; /* Avoid main body scroll */
 }
 
 body {
   margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  overflow: hidden;
 }
 
 h1,
-h2 {
+h2,
+h3,
+h4 {
   font-family: var(--heading);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-h);
+  margin: 0;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
 p {
   margin: 0;
 }
 
-code,
-.counter {
+code {
   font-family: var(--mono);
-  display: inline-flex;
+  font-size: 13px;
+  padding: 2px 6px;
   border-radius: 4px;
-  color: var(--text-h);
+  background: var(--code-bg);
+  color: var(--accent);
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* Custom Scrollbars for panels */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-focus);
 }
